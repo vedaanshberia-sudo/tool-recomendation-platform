@@ -1,0 +1,7 @@
+{
+  "name": "toolwise",
+  "version": "1.0.0",
+  "description": "ToolWise - find the best free or paid tool for any job",
+  "scripts": { "test": "node test.js" },
+  "license": "MIT"
+}
