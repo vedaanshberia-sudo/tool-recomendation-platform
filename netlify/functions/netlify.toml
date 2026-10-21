@@ -1,0 +1,10 @@
+# Netlify settings file. Netlify reads this automatically.
+[build]
+  publish = "."                      # the folder that contains index.html
+  functions = "netlify/functions"    # the folder that contains the backend
+
+# Lets the frontend call /api/recommend instead of the long Netlify URL
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/:splat"
+  status = 200
