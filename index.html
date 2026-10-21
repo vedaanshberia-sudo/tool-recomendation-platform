@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<!-- ToolWise FRONTEND. HTML comments use the <!-- --> symbol. CSS uses /* */ and JavaScript uses // -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ToolWise - Find the best tool for any job</title>
+<style>
+  /* ---- Colours. Dark mode values are set again below ---- */
+  :root { --bg:#f4f6fb; --card:#ffffff; --text:#1c2333; --muted:#5d6678; --line:#e2e6ef; --brand:#5b4bff; --brand2:#00b3a4; --good:#12805c; --warn:#a15c00; }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg:#0f1320; --card:#181d2e; --text:#eef1f8; --muted:#a3adc2; --line:#2a3148; --brand:#8b7dff; --brand2:#2dd4bf; --good:#4ade80; --warn:#fbbf24; }
+  }
+  * { box-sizing: border-box; }
+  body { margin:0; font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; background:var(--bg); color:var(--text); line-height:1.5; }
+  header { padding:48px 20px 70px; text-align:center; color:#fff; background:linear-gradient(135deg,#5b4bff,#00b3a4); }
+  header h1 { margin:0 0 8px; font-size:2.2rem; }
+  header p { margin:0 auto; max-width:620px; opacity:.95; }
+  main { max-width:980px; margin:-44px auto 40px; padding:0 16px; }
+  .panel { background:var(--card); border:1px solid var(--line); border-radius:16px; padding:22px; box-shadow:0 8px 28px rgba(0,0,0,.08); }
+  form { display:grid; grid-template-columns:repeat(auto-fit,minmax(210px,1fr)); gap:14px; }
+  label { display:block; font-size:.85rem; font-weight:600; color:var(--muted); margin-bottom:4px; }
+  select { width:100%; padding:10px; border-radius:10px; border:1px solid var(--line); background:var(--bg); color:var(--text); font-size:1rem; }
+  button { grid-column:1/-1; padding:13px; border:0; border-radius:12px; font-size:1.05rem; font-weight:700; color:#fff; cursor:pointer; background:linear-gradient(135deg,var(--brand),var(--brand2)); }
+  button:disabled { opacity:.6; cursor:wait; }
+  button:focus-visible, select:focus-visible, a:focus-visible { outline:3px solid var(--brand2); outline-offset:2px; }
+  .note { font-size:.85rem; color:var(--muted); margin:14px 0 0; }
+  #status { margin:18px 0; font-weight:600; }
+  .error { color:#c0392b; }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:16px; padding:18px; margin-bottom:14px; }
+  .top { display:flex; flex-wrap:wrap; gap:10px; align-items:center; justify-content:space-between; }
+  .top h3 { margin:0; font-size:1.2rem; }
+  .rank { display:inline-block; background:var(--brand); color:#fff; border-radius:8px; padding:2px 9px; margin-right:8px; font-size:.9rem; }
+  .score { font-weight:800; color:var(--brand); }
+  .tags span { display:inline-block; font-size:.78rem; padding:3px 9px; margin:6px 6px 0 0; border-radius:99px; background:var(--bg); border:1px solid var(--line); }
+  .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:12px; margin-top:12px; }
+  .box { background:var(--bg); border-radius:12px; padding:12px; font-size:.92rem; }
+  .box b { display:block; margin-bottom:4px; }
+  .verdict { margin-top:12px; font-weight:700; color:var(--good); }
+  .offers { color:var(--warn); font-size:.9rem; margin-top:8px; }
+  a.visit { color:var(--brand); font-weight:700; text-decoration:none; }
+  .tablewrap { overflow-x:auto; margin-top:8px; }
+  table { width:100%; border-collapse:collapse; min-width:560px; font-size:.92rem; }
+  th, td { padding:10px; border-bottom:1px solid var(--line); text-align:left; }
+  th { color:var(--muted); font-size:.8rem; text-transform:uppercase; letter-spacing:.04em; }
+  h2 { margin:26px 0 8px; font-size:1.25rem; }
+  footer { text-align:center; color:var(--muted); font-size:.85rem; padding:0 16px 30px; }
+</style>
+</head>
+<body>
+<header>
+  <h1>ToolWise</h1>
+  <p>Tell us what you want to do. We recommend the best tool, whether free is enough, and how to pay the least if you need paid.</p>
+</header>
+
+<main>
+  <section class="panel" aria-label="Preferences">
+    <form id="form">
+      <div><label for="category">What do you want to do?</label><select id="category"><option value="any">Any category</option></select></div>
+      <div><label for="field">Type of tool</label>
+        <select id="field"><option value="any">Any (AI or non-AI)</option><option value="nonai">Non-AI websites and apps</option><option value="ai">AI tools only</option></select></div>
+      <div><label for="budget">Budget</label>
+        <select id="budget"><option value="either">Free or paid</option><option value="free">Free only</option><option value="paid">Paid only</option></select></div>
+      <div><label for="priority">Priority</label>
+        <select id="priority"><option value="best">Best overall results</option><option value="cost">Lowest cost</option><option value="easy">Easiest to use</option><option value="power">Most powerful</option></select></div>
+      <div><label for="experience">Your experience</label>
+        <select id="experience"><option value="beginner">Beginner-friendly</option><option value="intermediate">Intermediate</option><option value="advanced">Advanced</option></select></div>
+      <div><label for="billing">Billing preference</label>
+        <select id="billing"><option value="compare">Compare both</option><option value="monthly">Monthly</option><option value="annual">Annual</option></select></div>
+      <button id="go" type="submit">Find my best tool</button>
+    </form>
+    <p class="note">Currency: INR (₹). Tip: pick a category for the most useful results.</p>
+  </section>
+
+  <div id="status" role="status" aria-live="polite"></div>
+  <div id="results"></div>
+  <div id="tablearea"></div>
+  <p class="note" id="offersNote"></p>
+</main>
+<footer id="disclaimer"></footer>
+
+<script>
+  // ---- Helpers ----
+  const $ = (id) => document.getElementById(id);
+  const inr = (n) => "₹" + Number(n).toLocaleString("en-IN");
+
+  // Builds an element safely (textContent prevents unsafe HTML injection).
+  function h(tag, cls, text) {
+    const el = document.createElement(tag);
+    if (cls) el.className = cls;
+    if (text !== undefined) el.textContent = text;
+    return el;
+  }
+
+  // ---- 1. Load category list from the backend when the page opens ----
+  async function loadCategories() {
+    try {
+      const res = await fetch("/api/recommend");
+      const data = await res.json();
+      Object.keys(data.categories).forEach((key) => {
+        const o = h("option", "", data.categories[key]);
+        o.value = key;
+        $("category").appendChild(o);
+      });
+    } catch (e) {
+      $("status").textContent = "Could not reach the server. If testing locally, run with 'netlify dev'.";
+      $("status").className = "error";
+    }
+  }
+
+  // ---- 2. Draw one result card ----
+  function card(r) {
+    const c = h("article", "card");
+    const top = h("div", "top");
+    const title = h("h3");
+    title.appendChild(h("span", "rank", "#" + r.rank));
+    title.appendChild(document.createTextNode(r.name));
+    top.appendChild(title);
+    top.appendChild(h("span", "score", "Match " + r.score + "/100"));
+    c.appendChild(top);
+    c.appendChild(h("p", "", r.bestFor + " · " + (r.field === "AI" ? "AI tool" : "Non-AI tool")));
+
+    const tags = h("div", "tags");
+    r.reasons.forEach((t) => tags.appendChild(h("span", "", t)));
+    c.appendChild(tags);
+
+    const grid = h("div", "grid");
+    if (r.free) {
+      const b = h("div", "box");
+      b.appendChild(h("b", "", "Free plan (" + r.free.score + "/10)"));
+      b.appendChild(document.createTextNode(r.free.note));
+      grid.appendChild(b);
+    }
+    if (r.paid) {
+      const p = r.paid, b = h("div", "box");
+      b.appendChild(h("b", "", "Paid: " + p.plan));
+      const lines = [];
+      if (p.monthly) lines.push("Monthly: " + inr(p.monthly) + " per month (" + inr(p.monthly * 12) + "/year)");
+      if (p.annual) lines.push("Annual: " + inr(p.annual) + " per year (about " + inr(Math.round(p.annual / 12)) + "/month)");
+      lines.forEach((l) => b.appendChild(h("div", "", l)));
+      b.appendChild(h("div", "", "Best billing: " + p.recommended.toUpperCase()));
+      b.appendChild(h("div", "", p.advice));
+      grid.appendChild(b);
+    }
+    c.appendChild(grid);
+    c.appendChild(h("div", "verdict", r.verdict));
+    if (r.offers.length) c.appendChild(h("div", "offers", "Offers: " + r.offers.join(" ")));
+    const link = h("a", "visit", "Visit " + r.name + " ->");
+    link.href = r.url; link.target = "_blank"; link.rel = "noopener noreferrer";
+    const wrap = h("p"); wrap.appendChild(link);
+    c.appendChild(wrap);
+    return c;
+  }
+
+  // ---- 3. Draw the comparison table ----
+  function table(rows) {
+    const box = h("div");
+    box.appendChild(h("h2", "", "Side-by-side comparison"));
+    const wrap = h("div", "tablewrap panel");
+    const t = h("table");
+    const head = h("tr");
+    ["Tool", "Free plan", "Monthly", "Annual (per year)", "Annual saves", "Best choice"].forEach((x) => head.appendChild(h("th", "", x)));
+    t.appendChild(head);
+    rows.forEach((r) => {
+      const tr = h("tr");
+      [r.name, r.hasFree ? "Yes" : "No", r.monthly ? inr(r.monthly) : "-", r.annual ? inr(r.annual) : "-",
+       r.savings ? inr(r.savings) : "-", r.best === "free" ? "Free" : r.best[0].toUpperCase() + r.best.slice(1)]
+        .forEach((x) => tr.appendChild(h("td", "", x)));
+      t.appendChild(tr);
+    });
+    wrap.appendChild(t); box.appendChild(wrap);
+    return box;
+  }
+
+  // ---- 4. Send the form to the backend and show the answer ----
+  $("form").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const btn = $("go");
+    btn.disabled = true;
+    $("status").className = ""; $("status").textContent = "Finding the best options...";
+    $("results").replaceChildren(); $("tablearea").replaceChildren();
+    try {
+      const body = {};
+      ["category", "field", "budget", "priority", "experience", "billing"].forEach((k) => (body[k] = $(k).value));
+      const res = await fetch("/api/recommend", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
+      const data = await res.json();
+      if (!data.ok) throw new Error(data.error || "Something went wrong.");
+      if (data.message) { $("status").textContent = data.message; return; }
+      $("status").textContent = "Top " + data.results.length + " matches for you:";
+      data.results.forEach((r) => $("results").appendChild(card(r)));
+      $("tablearea").appendChild(table(data.table));
+      $("offersNote").textContent = data.offersNote;
+      $("disclaimer").textContent = data.disclaimer;
+    } catch (err) {
+      $("status").className = "error";
+      $("status").textContent = "Error: " + err.message;
+    } finally {
+      btn.disabled = false;
+    }
+  });
+
+  loadCategories();
+</script>
+</body>
+</html>
